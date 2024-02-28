@@ -1,13 +1,12 @@
-
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
     username: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
-    images: [{ data: Buffer, contentType: String }],
+    images: [{ url: String }], // Modify to store image URLs
 });
 
 const User = mongoose.model('User', UserSchema);
 
-export default User
+export default User;

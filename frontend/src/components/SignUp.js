@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
 
 const SignUp = () => {
     const [username, setUsername] = useState("");
@@ -9,29 +13,48 @@ const SignUp = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
 
-    const handleSignUp = (e) => {
+
+    const handleSignUp = async (e) => {
         e.preventDefault();
+
         // Password validation
         if (password !== confirmPassword) {
             setError("Passwords do not match");
             return;
         }
+
         // Handle signup logic here
-        console.log(
-            "Signing up with username:",
-            username,
-            "email:",
-            email,
-            "and password:",
-            password
-        );
-        // Clear error and input fields after successful signup
-        setError("");
-        setUsername("");
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
+        try {
+            const response = await axios.post('http://localhost:8000/api/user/signup', {
+                username: username,
+                email: email,
+                password: password
+            });
+
+            // Assuming the server responds with a success message
+            console.log("User successfully created:", response.data);
+
+            // Navigate to login page
+            navigate('/login');
+
+            // Show success toast
+            toast.success('Account Created. Congratulations!');
+
+            // Clear error
+            setError("");
+        } catch (error) { 
+            // Handle signup error
+            console.error('Signup failed:', error);
+
+            // Display error message to the user using toast
+            if (error.response && error.response.data && error.response.data.error) {
+                toast.error(error.response.data.error);
+            } else {
+                toast.error("An error occurred during signup. Please try again later.");
+            }
+        }
     };
 
     return (

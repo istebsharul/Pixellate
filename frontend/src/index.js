@@ -3,15 +3,31 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { RouterProvider, createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
+import Homepage from './components/HomePage';
+import Login from './components/Login';
+import SignUp from './components/SignUp';
+import UserProfile from './components/UserProfile';
+import { UserContextProvider } from './context/UserContext'; // Import UserContextProvider
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path='/' element={<App />}>
+      <Route path="/home" element={<Homepage />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/profile" element={<UserProfile />} />
+    </Route>
+  )
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <UserContextProvider> {/* Wrap your RouterProvider with UserContextProvider */}
+      <RouterProvider router={router} />
+    </UserContextProvider>
+  </React.StrictMode>,
+);
+
 reportWebVitals();

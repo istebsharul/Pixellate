@@ -1,38 +1,63 @@
+//Login.js
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import toast from "react-hot-toast";
+
 
 const Login = () => {
   const [email, setEmail] = useState(""); // Changed from username to email
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    // Handle login logic here
+
+    // Check if email is empty
+    if (!email.trim()) {
+      toast.error("Email field cannot be empty.");
+      return;
+    }
+
     try {
       const response = await axios.post('http://localhost:8000/api/user/login', {
-        email: email, // Changed from username to email
+        email: email,
         password: password
-      });
-      setEmail("");
-      setPassword("");
-      // Handle response (e.g., redirect to dashboard)
-      console.log('Login successful:', response.data);
+      },
+        {
+          withCredentials: true
+        }
+      );
+
+      // console.log(response);
+
+      if (response.error) {
+        toast.error(response.error)
+      }
+
+      // Redirect to user profile
+      navigate('/profile');
+
+      // Show a success toast
+      toast.success('Login Successful. Welcome!');
     } catch (error) {
-      // Handle error (e.g., display error message)
       console.error('Login failed:', error);
       if (error.response.status === 401) {
-        alert("Entered Password is Wrong!");
+        toast.error("Entered Password is Wrong!");
       } else if (error.response.status === 400) {
-        alert("Empty password. Please enter your password.");
+        toast.error("Empty password. Please enter your password.");
+      } else if (error.response.status === 500) {
+        toast.error("Error signing JWT");
       } else {
-        alert("An error occurred. Please try again later.");
+        toast.error("An error occurred. Please try again later.");
+        // console.error(error);
       }
     }
   };
+
 
   return (
     <div className="flex justify-center items-center h-screen bg-white-50">

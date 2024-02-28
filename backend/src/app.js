@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use('/api/user', UserRoutes);
 
 // Mount the router for image uploads
-app.use('/api/images', imagesRouter);
+app.use('/api/user', imagesRouter);
 
 
 export { app };

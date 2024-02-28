@@ -7,15 +7,6 @@ export const UserContext = createContext({})
 export function UserContextProvider({ children }) {
     const [user, setUser] = useState(null);
 
-    // useEffect(() => {
-    //     if (!user) {
-    //         axios.get('http://localhost:8000/api/user/profile')
-    //             .then(({ data }) => {
-    //                 setUser(data);
-    //             })
-    //     }
-    // }, [user])
-
     useEffect(() => {
         if (!user) {
             axios.get('http://localhost:8000/api/user/profile', {
@@ -23,7 +14,7 @@ export function UserContextProvider({ children }) {
             })
                 .then(({ data }) => {
                     setUser(data);
-                    console.log(data);
+                    // console.log(data);
                 })
                 .catch(error => {
                     console.error('Error fetching user data:', error);

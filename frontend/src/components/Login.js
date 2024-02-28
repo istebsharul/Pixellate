@@ -27,9 +27,9 @@ const Login = () => {
         email: email,
         password: password
       },
-        {
-          withCredentials: true
-        }
+      {
+        withCredentials: true
+      }
       );
 
       // console.log(response);

@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react'
+import { UserContext } from '../context/UserContext';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
 import ImageModal from './Modal/ImageModal';
 
-
-const PublicUserProfile = () => {
+function MyImages() {
     const [images, setImages] = useState([]);
-    const { username } = useParams(); // Extract username from URL params
+    const { user } = useContext(UserContext);
 
     const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
@@ -19,22 +18,23 @@ const PublicUserProfile = () => {
     };
 
     useEffect(() => {
-        fetchImages();
-    }, [username]);
+        const fetchImages = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8000/api/user/${user.name}/images`);
+                setImages(response.data.images);
+            } catch (error) {
+                console.error('Error fetching images:', error);
+            }
+        };
 
-    const fetchImages = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8000/api/user/${username}/images`);
-            setImages(response.data.images);
-        } catch (error) {
-            console.error('Error fetching images:', error);
-        }
-    };
+        fetchImages();
+    }, [user.name, setImages]); // Include fetchImages in the dependency array
+
 
     return (
         <div>
             <div className="max-w-screen-lg mx-auto p-4">
-                <h2 className="text-lg font-semibold mb-2">{username}'s Gallery</h2>
+                <h2 className="text-lg font-semibold mb-2">My Gallery</h2>
                 <div className="w-full flex flex-wrap mx-2">
                     {images.map((imageUrl, index) => (
                         <div key={index} className="mr-1 mb-5">
@@ -53,9 +53,6 @@ const PublicUserProfile = () => {
             )}
         </div>
     );
-};
+}
 
-export default PublicUserProfile;
-
-
-
+export default MyImages

@@ -8,7 +8,9 @@ import Homepage from './components/HomePage';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import UserProfile from './components/UserProfile';
+import UserPublicProfile from './components/UserPublicProfile';
 import { UserContextProvider } from './context/UserContext'; // Import UserContextProvider
+import MyImages from './components/MyImages';
 
 
 const router = createBrowserRouter(
@@ -18,6 +20,8 @@ const router = createBrowserRouter(
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/profile" element={<UserProfile />} />
+      <Route path="/pprofile/:username" element={<UserPublicProfile />} />
+      <Route path="/myimages" element={< MyImages />} />
     </Route>
   )
 );

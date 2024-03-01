@@ -1,19 +1,21 @@
-// UserProfile.js
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { UserContext } from '../context/UserContext';
+import { FaTrash } from 'react-icons/fa';
 
 const UserProfile = () => {
     const { user } = useContext(UserContext);
     const [selectedImage, setSelectedImage] = useState(null);
     const [images, setImages] = useState([]);
+    const [deleteIndex, setDeleteIndex] = useState(null); // Index of the image to delete
+    const [loading, setLoading] = useState(false);
 
     const handleFileChange = (event) => {
         setSelectedImage(event.target.files[0]);
     };
 
-    const handleUpload = () => {
-        if (!selectedImage) {
+    const handleUpload = async () => {
+        if (!selectedImage || !user) {
             alert('Please select an image to upload');
             return;
         }
@@ -21,95 +23,123 @@ const UserProfile = () => {
         const formData = new FormData();
         formData.append('image', selectedImage);
 
-        axios.post(`http://localhost:8000/api/user/${user.name}/upload-image`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-            .then(response => {
-                console.log('Image uploaded successfully:', response.data);
-                // Optionally, you can update the user context or display a success message
-            })
-            .catch(error => {
-                console.error('Error uploading image:', error);
-                // Optionally, you can display an error message to the user
+        try {
+            setLoading(true);
+            await axios.post(`http://localhost:8000/api/user/${user.name}/upload-image`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
+
+            // Fetch the updated list of images after successful upload
+            const response = await axios.get(`http://localhost:8000/api/user/${user.name}/images`);
+            setImages(response.data.images);
+
+            setSelectedImage(null); // Reset the selected image state
+            setLoading(false);
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            setLoading(false);
+        }
+
+        window.location.reload();
     };
 
-    const handleDelete = async (imageId) => {
+
+    const handleDelete = async (index) => {
+        setDeleteIndex(index); // Set the index of the image to delete
+    };
+
+    const confirmDelete = async () => {
         try {
-            await axios.delete(`http://localhost:8000/api/user/${user.name}/images/${imageId}`);
+            await axios.delete(`http://localhost:8000/api/user/${user.name}/images/${deleteIndex}`);
+            setDeleteIndex(null); // Reset the deleteIndex state after successful deletion
+            fetchImages(); // Fetch images again after deletion
         } catch (error) {
-            console.error('Error deleting image: ', error);
+            console.error('Error deleting image:', error);
         }
+    };
+
+    const cancelDelete = () => {
+        setDeleteIndex(null); // Reset the deleteIndex state if delete is canceled
     };
 
 
     useEffect(() => {
         if (user) {
-            axios.get(`http://localhost:8000/api/user/${user.name}/images`)
-                .then(response => {
-                    setImages(response.data.images);
-
-                    console.log(response.data.images)
-                })
-                .catch(error => {
-                    console.error('Error fetching images:', error);
-                });
+            fetchImages();
         }
     }, [user]);
+
+    const fetchImages = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/user/${user.name}/images`);
+            setImages(response.data.images);
+        } catch (error) {
+            console.error('Error fetching images:', error);
+        }
+    };
 
 
     return (
         <div>
-            <h1 className='text-center'>Welcome to the User Profile Page</h1>
             {user && (
                 <div className="max-w-screen-lg mx-auto p-4">
-                    <p className="mb-4">Username: {user.name}</p>
+                    <p className="mb-4 text-center font-semibold text-xl">Username: {user.name}</p>
                     {/* Other user profile information can be displayed here */}
-                    <div className="mb-4">
-                        <input
-                            type="file"
-                            className="border border-gray-300 rounded p-2"
-                            onChange={handleFileChange}
-                        />
-                        <button
-                            className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            onClick={handleUpload}
-                        >
-                            Upload Image
-                        </button>
+                    <div className="rounded-lg shadow-inner w-min-content h-20  flex items-center justify-center mb-4 bg-gray-200">
+                        <div>
+                            <input
+                                type="file"
+                                className="w-min-content border-400 flex justify-center items-center border-gray-300 rounded p-2"
+                                onChange={handleFileChange}
+                            />
+                        </div>
+                        <div>
+                            <button
+                                className="ml-0 bg-gray-500 hover:bg-black text-white font-bold py-2 px-4 rounded"
+                                onClick={handleUpload}
+                            >
+                                Upload Image
+                            </button>
+                        </div>
                     </div>
 
                     {images.length > 0 && (
                         <div>
                             <h2 className="text-lg font-semibold mb-2">Your Images</h2>
-                            <div className="flex flex-wrap -mx-2">
+                            <div className="w-full flex flex-wrap mx-2">
                                 {images.map((imageUrl, index) => (
-                                    // <div key={index} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 mb-4">
-                                    //     <div className="relative overflow-hidden rounded-lg" style={{ height: "250px" }}>
-                                    //         <img
-                                    //             className="absolute inset-0 w-full h-full object-cover"
-                                    //             src={imageUrl}
-                                    //             alt="Hello"
-                                    //         />
-                                    //         <button onClick={() => (index)}>Delete</button>
-                                    //     </div>
-                                    // </div>
-                                    <div key={index} className="relative mr-10 mb-10">
-                                        <img src={imageUrl} alt="" className="w-48 h-48" />
+                                    <div key={index} className="relative mr-1 mb-10">
+                                        <img src={imageUrl} alt="" className="rounded-lg object-cover w-48 h-48" />
                                         <button
                                             onClick={() => handleDelete(index)}
-                                            className="absolute bottom-2 right-2 z-10 px-2 py-1 bg-gray-800 text-white rounded"
+                                            className="absolute bottom-2 right-2 z-1 px-2 py-1 object-cover bg-gray-100 bg-opacity-50 text-black rounded"
                                         >
-                                            Delete
+                                            <FaTrash /> {/* Use the delete icon here */}
                                         </button>
                                     </div>
-
                                 ))}
                             </div>
                         </div>
                     )}
+                </div>
+            )}
+
+            {/* Confirm Delete Modal */}
+            {deleteIndex !== null && (
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                    <div className="bg-white p-4 rounded shadow-md">
+                        <p>Are you sure you want to delete this image?</p>
+                        <div className="mt-4 flex justify-between">
+                            <button onClick={confirmDelete} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                                Yes, Delete
+                            </button>
+                            <button onClick={cancelDelete} className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

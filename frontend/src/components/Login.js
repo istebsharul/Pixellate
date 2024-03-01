@@ -7,6 +7,7 @@ import axios from 'axios';
 import toast from "react-hot-toast";
 
 
+
 const Login = () => {
   const [email, setEmail] = useState(""); // Changed from username to email
   const [password, setPassword] = useState("");
@@ -27,9 +28,9 @@ const Login = () => {
         email: email,
         password: password
       },
-      {
-        withCredentials: true
-      }
+        {
+          withCredentials: true
+        }
       );
 
       // console.log(response);
@@ -60,13 +61,13 @@ const Login = () => {
 
 
   return (
-    <div className="flex justify-center items-center h-screen bg-white-50">
-      <div className="w-full max-w-xs bg-slate-300">
+    <div className="flex flex-col justify-center items-center h-screen bg-white-50">
+      <h2 className="text-2xl font-bold text-center mb-4 p-3">Login to your account</h2>
+      <div className="w-full rounded-lg max-w-xs bg-gray-200">
         <form
-          className="bg-white-500 shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          className="bg-white-500 px-8 pt-6 pb-8 mt-4"
           onSubmit={handleLogin}
         >
-          <h2 className="text-2xl text-center mb-4">Login</h2>
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -110,7 +111,7 @@ const Login = () => {
           </div>
           <div className="flex items-center justify-center">
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="border border-black bg-black hover:bg-white hover:text-black text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
               Login
@@ -120,7 +121,7 @@ const Login = () => {
             New Registration?
             <Link
               to="/signup"
-              className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+              className="inline-block align-baseline font-bold text-sm text-black hover:text-black"
             >
               Sign up
             </Link>

@@ -38,7 +38,7 @@ function Header() {
                         <Link to="/home" className="text-white hover:text-gray-300">Home </Link>
                         <Link to="/myimages" className="text-white hover:text-gray-300">My Images</Link>
                     </li>
-                    {user && (
+                    {(
                         <li className="relative">
                             <div onClick={toggleDropdown} className="text-white hover:text-gray-300 cursor-pointer">
                                 <FontAwesomeIcon icon={faUser} />

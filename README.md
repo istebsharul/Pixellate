@@ -55,3 +55,30 @@ To run the backend, execute the following command:
       cd ../backend
       npm run dev
    ```
+
+
+## Features
+
+1. **User Authentication:** Users can sign up for an account or log in to their existing account.
+   - Test link: [Sign Up](http://localhost:3000/signup) | [Login](http://localhost:3000/login)
+
+2. **Image Upload:** Users can upload images to their profile.
+   - Test link: [Image Upload](http://localhost:3000/profile)
+
+3. **Mosaic Formation:** Uploaded images are displayed in mosaic formation on the landing page and user profile page.
+   - Test link: [Landing Page](http://localhost:3000) | [User Profile](http://localhost:3000/home)
+
+4. **Pages:**
+   - **Landing Page:** Randomly selected user-uploaded images are displayed.
+   - **Sign Up Page:** Users can sign up for an account.
+   - **Login Page:** Users can log in to their account.
+   - **User Profile Page:** Users can upload images and view their uploaded images.
+   - **User Public Page:** Display user's uploaded images based on their username.
+   
+5. **Test Link: Only after starting application both backend and frontend**
+  - [Landing Page](http://localhost:3000/home) 
+  - [Sign Up Page](http://localhost:3000/signup) 
+  - [Login Page](http://localhost:3000/login) 
+  - [User Profile Page](http://localhost:3000/profile) 
+  - [User Public Page](http://localhost:3000/pprofile/nature)
+  - Sample User = bike, nature, coding, street, flower

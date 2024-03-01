@@ -5,7 +5,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from "react-hot-toast";
-
+import logo from "../assets/logo.png"
 
 
 const Login = () => {
@@ -61,9 +61,10 @@ const Login = () => {
 
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen bg-white-50">
+    <div className="flex flex-col justify-center items-center h-full bg-white-50">
+      <div className="w-1/5 flex justify-center items-center"><img src={logo} alt="" className="w-20 mx-5 hover:rotate-90 transition-transform duration-400 ease-in-out" /></div>
       <h2 className="text-2xl font-bold text-center mb-4 p-3">Login to your account</h2>
-      <div className="w-full rounded-lg max-w-xs bg-gray-200">
+      <div className="w-full rounded-lg max-w-xs bg-gray-300">
         <form
           className="bg-white-500 px-8 pt-6 pb-8 mt-4"
           onSubmit={handleLogin}

@@ -2,6 +2,8 @@ import React, { useContext, useState, useEffect } from 'react'
 import { UserContext } from '../context/UserContext';
 import axios from 'axios';
 import ImageModal from './Modal/ImageModal';
+import { Link } from 'react-router-dom';
+
 
 function MyImages() {
     const [images, setImages] = useState([]);
@@ -51,6 +53,10 @@ function MyImages() {
             {selectedImageIndex !== null && (
                 <ImageModal imageUrl={images[selectedImageIndex]} onClose={closeModal} />
             )}
+
+            <div className="w-max mx-auto">
+                <Link to="/profile" className="block px-4 py-2 border border-black text-white bg-black hover:bg-white hover:text-black rounded-md shadow-md transition-colors duration-300 ease-in-out">Click Here to Upload More</Link>
+            </div>
         </div>
     );
 }

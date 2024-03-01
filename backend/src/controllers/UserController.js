@@ -108,7 +108,41 @@ const UserController = {
             res.status(401).json({ message: 'No token found' });
         }
     },
+    getRandomImages: async (req, res) => {
+        try {
+            // Fetch random users from the database
+            const randomUsers = await User.aggregate([
+                { $sample: { size: 10 } }, // Sample 10 random users
+                { $project: { images: { $slice: ["$images", 3] } } } // Project the first 3 images for each user
+            ]);
 
+            // Extract image URLs from random users
+            const randomImages = randomUsers.flatMap(user => user.images.map(image => image.url));
+
+            // randomImages = shuffleArray(randomImages);
+
+            res.status(200).json(randomImages);
+        } catch (error) {
+            console.error('Error fetching random images:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    },
+
+    // getRandomImages: async (req, res) => {
+    //     try {
+    //         // Fetch random users from the database
+    //         const randomUsers = await User.aggregate([{ $sample: { size: 10 } }]);
+
+    //         // console.log(randomUsers);
+    //         // Extract image URLs from random users
+    //         const randomImages = randomUsers.map(user => user.images[Math.floor(Math.random() * user.images.length)].url);
+
+    //         res.status(200).json(randomImages);
+    //     } catch (error) {
+    //         console.error('Error fetching random images:', error);
+    //         res.status(500).json({ message: 'Internal server error' });
+    //     }
+    // },
 };
 
 export default UserController

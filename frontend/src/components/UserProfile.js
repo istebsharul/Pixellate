@@ -87,7 +87,7 @@ const UserProfile = () => {
                 <div className="max-w-screen-lg mx-auto p-4">
                     <p className="mb-4 text-center font-semibold text-xl">Username: {user.name}</p>
                     {/* Other user profile information can be displayed here */}
-                    <div className="rounded-lg shadow-inner w-min-content h-20  flex items-center justify-center mb-4 bg-gray-200">
+                    <div className="mx-auto rounded-lg shadow-inner w-max px-4 h-20 flex items-center justify-center mb-4 bg-gray-200">
                         <div>
                             <input
                                 type="file"

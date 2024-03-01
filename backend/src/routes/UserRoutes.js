@@ -14,6 +14,8 @@ router.use(
 router.post('/signup', UserController.signUp);
 router.post('/login', UserController.login);
 router.get('/profile', UserController.profile);
+router.get('/random-images',UserController.getRandomImages);
 
 
 export { router };
+ 

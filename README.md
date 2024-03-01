@@ -51,7 +51,7 @@ To run the frontend, execute the following command:
 The backend folder contains the server side of the Pixellate application.
 To run the backend, execute the following command:
 
-    ```bash
+   ```bash
       cd ../backend
       npm run dev
    ```

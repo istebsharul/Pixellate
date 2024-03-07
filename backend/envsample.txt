@@ -1,8 +1,0 @@
-PORT = 8000
-MONGODB_URI = mongodb+srv://mdistebsharulbari:pixellate24@cluster1.0otlqh9.mongodb.net
-
-JWT_SECRET = 12345
-
-cloud_name = dsufduuv2
-api_key = 439628667132149
-api_secret = jpu3oOxmZzCzO1_NdoidOUDdO7Q
